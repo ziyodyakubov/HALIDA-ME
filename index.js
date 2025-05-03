@@ -2,6 +2,7 @@ const modalOverlay = document.getElementById('modalOverlay');
 const modalContent = document.getElementById('modalContent');
 const openModalBtn = document.querySelectorAll(".openModalBtn")
 
+
 openModalBtn.forEach(btn => {
     btn.addEventListener('click', () => {
       modalOverlay.classList.remove('hidden');
@@ -22,10 +23,19 @@ openModalBtn.forEach(btn => {
 
 const form = document.querySelector('form[name="contact-form"]');
 
-  // Forma submit qilinganda
-  form.addEventListener('submit', function(event) {
+// Forma submit qilinganda
+form.addEventListener('submit', function(event) {
     event.preventDefault(); // Forma default yuborilishini to‘xtatamiz
-
+  
+    // Telefon raqamini tekshiramiz
+    const numberInput = form.querySelector('input[name="your-number"]');
+    const numberValue = numberInput.value.trim();
+  
+    if (numberValue.length < 9) {
+      alert('Telefon raqamingizni qayta tekshiring ❗️');
+      return; // Agar xato bo‘lsa, shu yerda to‘xtaydi va fetch ishlamaydi
+    }
+  
     // Google Script ga yuborish
     fetch(form.action, {
       method: 'POST',
@@ -34,17 +44,18 @@ const form = document.querySelector('form[name="contact-form"]');
     .then(response => {
       if (response.ok) {
         // Success holati
-        alert('Muvaffaqiyatli yuborildi!');
+        alert('Muvaffaqiyatli yuborildi 🎉');
         modalOverlay.classList.add('hidden'); // Modalni yopish
         form.reset(); // Formani tozalash
       } else {
-        alert('Xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.');
+        alert('Xatolik yuz berdi. Iltimos, qayta urinib ko‘ring ⚠️');
       }
     })
     .catch(error => {
-      alert('Tarmoq xatoligi yuz berdi.');
+      alert('Tarmoq xatoligi yuz berdi ❗️');
     });
   });
+  
 
   // Enter bosilganda ham submit bo‘lishi tabiiy (form ichida) — qo‘shimcha kod shart emas,
   // lekin faqat Enter ga ishlashini xohlasangiz, shuni ham yozib qo‘yaman:
