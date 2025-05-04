@@ -27,13 +27,30 @@ const form = document.querySelector('form[name="contact-form"]');
 form.addEventListener('submit', function(event) {
     event.preventDefault(); // Forma default yuborilishini to‘xtatamiz
   
-    // Telefon raqamini tekshiramiz
+    const nameInput = form.querySelector('input[name="your-name"]');
     const numberInput = form.querySelector('input[name="your-number"]');
+  
+    const nameValue = nameInput.value.trim();
     const numberValue = numberInput.value.trim();
+  
+    if (!nameValue && !numberValue) {
+      alert("Ma'lumotingizni kiriting ❗️");
+      return;
+    }
+  
+    if (!nameValue) {
+      alert("Iltimos, ismingizni yozing ❗️");
+      return;
+    }
+  
+    if (!numberValue) {
+      alert("Iltimos, telefon raqamingizni yozib qoldiring ❗️");
+      return;
+    }
   
     if (numberValue.length < 9) {
       alert('Telefon raqamingizni qayta tekshiring ❗️');
-      return; // Agar xato bo‘lsa, shu yerda to‘xtaydi va fetch ishlamaydi
+      return;
     }
   
     // Google Script ga yuborish
@@ -43,7 +60,6 @@ form.addEventListener('submit', function(event) {
     })
     .then(response => {
       if (response.ok) {
-        // Success holati
         alert('Muvaffaqiyatli yuborildi 🎉');
         modalOverlay.classList.add('hidden'); // Modalni yopish
         form.reset(); // Formani tozalash
@@ -55,6 +71,7 @@ form.addEventListener('submit', function(event) {
       alert('Tarmoq xatoligi yuz berdi ❗️');
     });
   });
+  
   
 
   // Enter bosilganda ham submit bo‘lishi tabiiy (form ichida) — qo‘shimcha kod shart emas,
