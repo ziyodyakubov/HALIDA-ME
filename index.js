@@ -34,7 +34,7 @@ form.addEventListener('submit', function(event) {
     const numberValue = numberInput.value.trim();
   
     if (!nameValue && !numberValue) {
-      alert("Ma'lumotingizni kiriting ❗️");
+      alert("Ma'lumotlaringizni kiriting ❗️");
       return;
     }
   
