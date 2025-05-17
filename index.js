@@ -89,7 +89,7 @@ form.addEventListener('submit', function(event) {
     modalOverlay.classList.add('hidden');
   });
 
-  const deadline = new Date("2025-05-15T23:59:59"); // Masalan: 2025-05-15 23:59:59
+  const deadline = new Date("2025-05-25T23:59:59");
 
     function updateTimer() {
       const now = new Date();
