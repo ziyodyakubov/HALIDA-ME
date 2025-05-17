@@ -89,28 +89,41 @@ form.addEventListener('submit', function(event) {
     modalOverlay.classList.add('hidden');
   });
 
-  const deadline = new Date("2025-05-25T23:59:59");
+ const STORAGE_KEY = 'userTimerDeadline';
 
-    function updateTimer() {
-      const now = new Date();
-      const diff = deadline - now;
+  // Deadline-ni saqlash yoki olish
+  let deadline = localStorage.getItem(STORAGE_KEY);
 
-      if (diff <= 0) {
-        document.getElementById('hours').textContent = "00";
-        document.getElementById('minutes').textContent = "00";
-        document.getElementById('seconds').textContent = "00";
-        clearInterval(interval);
-        return;
-      }
+  if (!deadline) {
+    // Foydalanuvchi birinchi kirganida 24 soat qo‘shiladi
+    const now = new Date();
+    deadline = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    localStorage.setItem(STORAGE_KEY, deadline.toISOString());
+  } else {
+    // Saqlangan stringni Date formatiga o‘tkazamiz
+    deadline = new Date(deadline);
+  }
 
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  function updateTimer() {
+    const now = new Date();
+    const diff = deadline - now;
 
-      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    if (diff <= 0) {
+      document.getElementById('hours').textContent = "00";
+      document.getElementById('minutes').textContent = "00";
+      document.getElementById('seconds').textContent = "00";
+      clearInterval(interval);
+      return;
     }
 
-    updateTimer();
-    const interval = setInterval(updateTimer, 1000);
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+  }
+
+  updateTimer();
+  const interval = setInterval(updateTimer, 1000);
